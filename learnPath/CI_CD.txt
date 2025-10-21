@@ -1,0 +1,50 @@
+====== #CI = Continuous Integration==================
+Developers frequently merge their code changes into a shared repository (often multiple times a day).
+Each integration triggers automated builds and tests to detect errors early.
+Goal: Catch bugs early, improve code quality, and reduce integration problems.
+-> how it works :
+    When a developer saves (commits) their code to a version control system like Git,
+    the CI pipeline starts. It takes the new changes, builds the project, and runs tests
+    automatically. After that, the server tells the developer if adding the new code to
+    the existing code worked or failed.
+    ex : .github/workflows/ci.yml
+____________________________
+name: CI_PIPELINE                   #This sets the name of your workflow.
+
+on:                                 #This tells GitHub when to run the workflow.
+  push:                             #means it will trigger whenever someone pushes code.
+    branches: [ main ]              #restricts it to only run when code is pushed to the main branch.
+
+jobs:                               #Defines a job named build.
+  build:
+    runs-on: ubuntu-latest          #means it will run on a virtual Ubuntu Linux machine provided by GitHub Actions.
+  
+  steps:                            #Starts the list of steps the job will perform.
+    - name: Checkout_code           #is a label for the step
+      uses: actions/checkout@v5     #tells GitHub to check out your repository code to the runner.
+    
+    - name: Set_up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+    
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run tests
+      run: npm test
+_____________________________
+✅ Summary of Workflow Flow
+Workflow is triggered on push to main.
+GitHub creates a virtual Ubuntu machine.
+Steps run in order:
+Checkout your code
+Setup Node.js
+Install dependencies
+Run tests
+If all steps succeed → workflow passes; if any step fails → workflow fails.
+
+=====# CD = Continuous Delivery / Continuous Deployment ===========================
+Continuous Delivery: Code changes are automatically prepared for release to production. A human may still approve deployment.
+Continuous Deployment: Every successful change that passes tests is automatically deployed to production without manual approval.
+Goal: Deliver features and fixes faster, reliably, and consistently.

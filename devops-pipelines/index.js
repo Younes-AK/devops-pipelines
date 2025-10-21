@@ -1,0 +1,2 @@
+
+console.log('LEAR CI/CD WITH GITHUB ACTION')
